@@ -10,14 +10,11 @@
 
 ## Features
 
-- ✅ Right click detection (`using_item` advancement)
-- ✅ Left click entity detection (`player_hurt_entity` advancement)
-- ✅ Auto-revoke (tekrar tıklanabilir)
-- ✅ Hook-based API (`#click_api:on_right_click`, `#click_api:on_left_click`)
-- ✅ Macro tabanlı komut desteği (`click_api:cmd/run`)
+- ✅ Right click detection
+- ✅ Left click entity detection
+- ✅ Hook-based API
+- ✅ Macro tabanlı komut desteği
 - ✅ Uninstall fonksiyonu
-- ✅ Overlay mimarisi (1.21.4 / 1.21.5 / 26.1)
-- ⚠️ Air left click tespit edilemez (Minecraft kısıtlaması)
 
 ---
 
@@ -35,7 +32,16 @@ Click eventlerini dinlemek için kendi packinizden tag'e fonksiyon ekleyin:
 ```json
 {
   "values": [
-    "senin_namespace:fonksiyon_adi"
+    "senin_namespace:fonksiyon1"
+  ]
+}
+```
+
+**`data/click_api/tags/function/on_left_click.json`**
+```json
+{
+  "values": [
+    "senin_namespace:fonksiyon2"
   ]
 }
 ```
@@ -65,7 +71,7 @@ function click_api:cmd/run {Command:"say Merhaba"}
 ## Uninstall
 
 ```
-/function click_api:uninstall
+/function click_api:api/uninstall
 ```
 
 ---
@@ -74,16 +80,14 @@ function click_api:cmd/run {Command:"say Merhaba"}
 
 | Klasör | Sürüm | Pack Format |
 |--------|-------|-------------|
-| `data/` (base) | 1.21.4 | 61–70 |
-| `overlay_1_21_5/` | 1.21.5 | 71–93 |
-| `overlay_26_1/` | 26.1 | 95–96 |
+| `data/` (base) | 1.21.x ve 26.x | 48–101 |
 
 ---
 
 ## Limitations
 
 - **Air left click** Minecraft'ta tespit edilemez.
-- Left click blok için `minecraft.mined` stat tabanlı kendi sisteminizi kurabilirsiniz.
+- Left click blok için [`enchantment/lc.json`](https://github.com/ToolkitMC/click-api/blob/main/data/click_api/enchantment/lc.json) stat tabanlı kendi sisteminizi kurabilirsiniz.
 
 ---
 

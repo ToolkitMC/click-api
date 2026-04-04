@@ -5,6 +5,7 @@
 execute if data storage click_api:internal {loaded:1b} run return 0
 
 # Scoreboard'ları oluştur
+scoreboard objectives add click_api.temp dummy
 scoreboard objectives add click_api.rc minecraft.used:minecraft.carrot_on_a_stick "Right Click"
 
 # Storage init

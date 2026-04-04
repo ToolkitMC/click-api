@@ -44,15 +44,15 @@ jobs:
         run: |
           required=(
             "data/click_api/function/internal/load.mcfunction"
-            "data/click_api/function/internal/on_right_click.mcfunction"
-            "data/click_api/function/internal/on_left_click.mcfunction"
-            "data/click_api/function/internal/uninstall.mcfunction"
+            "data/click_api/function/detect/on_right_click.mcfunction"
+            "data/click_api/function/detect/on_left_click.mcfunction"
+            "data/click_api/function/api/uninstall.mcfunction"
             "data/click_api/function/cmd/run.mcfunction"
             "data/click_api/function/cmd/process_queue.mcfunction"
             "data/click_api/function/cmd/process_queue_step.mcfunction"
             "data/click_api/function/cmd/queue_run.mcfunction"
             "data/click_api/advancement/right_click.json"
-            "data/click_api/advancement/left_click_entity.json"
+            "data/click_api/enchantment/lc.json"
             "data/minecraft/tags/function/load.json"
           )
           failed=0
