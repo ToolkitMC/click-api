@@ -1,12 +1,18 @@
-# click_api v2.0 | detect/left_click
+# click_api v2.2 | detect/left_click
 # @context: @s = tıklayan oyuncu
-# @input: scores.click_api.lc_dealt >= 1, SelectedItem = carrot_on_a_stick
+
+# Sadece left_click veya main tipli item'lar geçer
+execute unless data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"left_click"}} unless data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"main"}} run return 0
 
 # Event storage'a kaydet
 data modify storage click_api:event current set value {type:"left_click"}
-execute store result storage click_api:event current.player_id int 1 run scoreboard players get @s click_api.lc_dealt
+data modify storage click_api:event current.executor_uuid set from entity @s UUID
 function click_api:event/trigger with storage click_api:event current
 
-# Hook tag'ini çalıştır
-function #click_api:on_left_click
-function click_api:cmd/queue_add with entity @s SelectedItem.components."minecraft:custom_data".clickAPI.run
+# Tip bazlı hook tag'larını çalıştır
+execute if data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"left_click"}} run function #click_api:on_left_click
+execute if data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"main"}} run function #click_api:on_main_left
+function #click_api:on_any_click
+
+# clickAPI.run -> queue (Executor UUID ile)
+execute if data entity @s SelectedItem.components."minecraft:custom_data".clickAPI.run run function click_api:cmd/queue_from_entity

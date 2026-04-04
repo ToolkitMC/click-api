@@ -1,12 +1,10 @@
 {
   "pack": {
-    "description": "ToolkitMC | click_api - v1.0.1",
+    "description": "ToolkitMC | click_api - v2.2.0",
     "pack_format": 61,
     "supported_formats": {
       "min_inclusive": 61,
       "max_inclusive": 1000000
-    },
-    "min_format": 61,
-    "max_format": 1000000
+    }
   }
 }

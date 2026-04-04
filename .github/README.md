@@ -1,96 +1,102 @@
-# click_api
+# click_api v2.1.0
+**ToolkitMC** — Scoreboard + Macro tabanlı click detection sistemi
 
-> ToolkitMC | Carrot on a Stick click detection library for Minecraft Java Edition datapacks.
-
-**Contributors:** tickwarden, asn44nb  
-**License:** MIT  
-**Supported versions:** 1.21.4 → 26.1 (pack formats 61–96)
+Minecraft Java Edition 1.21.4+ (pack_format 61+) için geliştirilmiştir.
 
 ---
 
-## Features
+## Kurulum
 
-- ✅ Right click detection
-- ✅ Left click entity detection
-- ✅ Hook-based API
-- ✅ Macro tabanlı komut desteği
-- ✅ Uninstall fonksiyonu
+Datapack'i dünyanızın `datapacks/` klasörüne koyun, ardından `/reload` çalıştırın.
 
 ---
 
-## Installation
+## Item Tipleri
 
-`datapacks/` klasörüne koyun, `/reload` çalıştırın.
-
----
-
-## Hook Kullanımı
-
-Click eventlerini dinlemek için kendi packinizden tag'e fonksiyon ekleyin:
-
-**`data/click_api/tags/function/on_right_click.json`**
-```json
-{
-  "values": [
-    "senin_namespace:fonksiyon1"
-  ]
-}
-```
-
-**`data/click_api/tags/function/on_left_click.json`**
-```json
-{
-  "values": [
-    "senin_namespace:fonksiyon2"
-  ]
-}
-```
-
-Fonksiyon `@s` = tıklayan oyuncu context'inde çalışır.
-
-| Tag | Tetikleyici |
-|-----|-------------|
-| `#click_api:on_right_click` | Sağ tık (carrot_on_a_stick) |
-| `#click_api:on_left_click` | Sol tık entity'ye (carrot_on_a_stick) |
-
----
-
-## Komut Desteği
+| Type | Açıklama | give value |
+|---|---|---|
+| `left_click` | Sadece sol tıklamayı yakalar | `1` |
+| `right_click` | Sadece sağ tıklamayı yakalar | `2` |
+| `main` | Her ikisini de yakalar | `3` |
 
 ```mcfunction
-function click_api:cmd/run {Command:"gamemode creative @s"}
-function click_api:cmd/run {Command:"say Merhaba"}
-```
-
-- Komut başına `/` koymaya gerek yok
-- `@s` ve `at @s` context geçerlidir
-- 1.20.2+ macro sistemi kullanılır
-
----
-
-## Uninstall
-
-```
-/function click_api:api/uninstall
+# Hazır item ver
+function click_api:api/give {value:1}   # left click
+function click_api:api/give {value:2}   # right click
+function click_api:api/give {value:3}   # main (her ikisi)
 ```
 
 ---
 
-## Overlay Mimarisi
+## Komut Çalıştırma
 
-| Klasör | Sürüm | Pack Format |
-|--------|-------|-------------|
-| `data/` (base) | 1.21.x ve 26.x | 48–101 |
+Item'ın `custom_data` bileşenine `clickAPI.run` eklenerek tıklandığında otomatik komut çalıştırılabilir.
+
+### Tek Komut
+```
+carrot_on_a_stick[custom_data={clickAPI:{type:"right_click",run:{Command:"say Merhaba!",Delay:0}}}]
+```
+
+### Çoklu Komut (v2.1+)
+```
+carrot_on_a_stick[custom_data={clickAPI:{type:"right_click",run:{Commands:[
+  {cmd:"say İlk komut",delay:0},
+  {cmd:"say 1 saniye sonra",delay:20},
+  {cmd:"say 2 saniye sonra",delay:40}
+]}}}]
+```
+
+- `Delay` / `delay`: Tick cinsinden gecikme (0 = anında, 20 = 1 saniye)
+- `Commands` listesinde `cmd` ve `delay` anahtarları kullanılır
+- Tek komut formatında `Command` ve `Delay` (büyük harf) kullanılır
 
 ---
 
-## Limitations
+## Hook Sistemi
 
-- **Air left click** Minecraft'ta tespit edilemez.
-- Left click blok için [`enchantment/lc.json`](https://github.com/ToolkitMC/click-api/blob/main/data/click_api/enchantment/lc.json) stat tabanlı kendi sisteminizi kurabilirsiniz.
+Kendi fonksiyonlarını `on_left_click` veya `on_right_click` tag'ine ekle:
+
+```json
+// data/senin_namespace/tags/function/on_left_click.json
+{
+  "values": ["senin_namespace:sol_tiklama_handler"]
+}
+```
 
 ---
 
-## License
+## API Fonksiyonları
 
-MIT © ToolkitMC
+```mcfunction
+function click_api:api/give {value:1|2|3}  # Item ver
+function click_api:api/debug_toggle         # Debug aç/kapat
+function click_api:api/status               # Sistem durumu
+function click_api:api/show_events          # Son event'leri listele
+function click_api:api/uninstall            # Temizle
+```
+
+---
+
+## Detection Mekanizması
+
+- **Right click**: `minecraft.used:minecraft.carrot_on_a_stick` scoreboard ile tespit
+- **Left click**: `minecraft:post_piercing_attack` enchantment effect ile tespit (`click_api:lc`)
+- **Main**: Her ikisi birden
+
+---
+
+## Değişiklik Geçmişi
+
+### v2.1.0
+- **Yeni**: Çoklu komut sistemi (`Commands:[{cmd,delay},...]`)
+- **Yeni**: `main` item tipi (hem left hem right click)
+- **Yeni**: `api/give {value:3}` ile main item verilmesi
+- **Düzeltme**: `minecraft:piercing_weapo` typo → `minecraft:piercing_weapon`
+- **Düzeltme**: `click_api.lc_dealt` scoreboard objective artık `load`'da oluşturuluyor
+- **Düzeltme**: `click_api.debug` scoreboard `load`'a taşındı
+- **Düzeltme**: `api/status` artık `click_api.temp` kullanıyor (rc değil)
+- **Düzeltme**: `uninstall` yeni storage ve scoreboard'ları temizliyor
+- **Düzeltme**: CRLF → LF satır sonları normalize edildi
+
+### v2.0 / v1.0.1
+- İlk sürüm

@@ -1,10 +1,7 @@
-# click_api v2.0 | api/debug_toggle
-# Debug modunu aç/kapat (Skorboard yöntemi - en stabil)
+# click_api v2.1 | api/debug_toggle
+# Debug modunu aç/kapat
 
-# Skorboard yoksa oluştur (bir kereye mahsus)
-scoreboard objectives add click_api.debug dummy
-
-# Toggle yap (0 ↔ 1 arası çevir)
+# Toggle yap (0 <-> 1)
 scoreboard players add @s click_api.debug 1
 execute if score @s click_api.debug matches 2.. run scoreboard players set @s click_api.debug 0
 
