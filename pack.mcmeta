@@ -1,7 +1,7 @@
 {
   "pack": {
     "description": "ToolkitMC | click_api - Carrot on a Stick click detection library",
-    "pack_format": 101,
+    "pack_format": 61,
     "supported_formats": {
       "min_inclusive": 61,
       "max_inclusive": 1000000
@@ -15,7 +15,7 @@
         "directory": "overlay_1_21_5",
         "formats": {
           "min_inclusive": 71,
-          "max_inclusive": 1000000
+          "max_inclusive": 100
         },
         "min_format": 71,
         "max_format": 1000000
@@ -24,7 +24,7 @@
         "directory": "overlay_26_1",
         "formats": 101,
         "min_format": 101,
-        "max_format": 101
+        "max_format": 1000000
       }
     ]
   }

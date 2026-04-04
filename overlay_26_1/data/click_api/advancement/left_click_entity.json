@@ -1,0 +1,15 @@
+{
+  "criteria": {
+    "lc_entity": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "item": {
+          "items": ["minecraft:carrot_on_a_stick"]
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "click_api:internal/on_left_click"
+  }
+}
