@@ -1,0 +1,15 @@
+{
+  "criteria": {
+    "lc_block": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "item": {
+          "items": "minecraft:carrot_on_a_stick"
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "click_api:internal/on_left_click"
+  }
+}
