@@ -1,13 +1,23 @@
 # click_api | api/example
-# Baska bir pack bu dosyayi kendi tag'ine ekler:
+# This file is for reference only, feel free to delete it.
 #
-# data/SENIN_NAMESPACE/tags/function/on_right_click_handler.json yok,
-# direk click_api tag'ine eklenir:
+# == HOOK USAGE ==
+# Add your function to the click_api tag files:
+#   data/click_api/tags/function/on_right_click.json
+#   { "values": ["your_namespace:your_function"] }
+# Your function runs with @s = the player who clicked.
 #
-# data/click_api/tags/function/on_right_click.json:
-# { "values": ["senin_namespace:click/on_right_click"] }
+# == DIRECT COMMAND ==
+# Run a command instantly from anywhere:
+#   function click_api:cmd/run {Command:"gamemode creative @s"}
 #
-# Bu fonksiyon @s = tiklayan oyuncu context'inde calisir.
-
-# Ornek kullanim:
-tellraw @s {"text":"[click_api] Sag tik algilandi!","color":"yellow"}
+# == QUEUE SYSTEM ==
+# Queue commands to run on the next right click:
+#   data modify storage click_api:cmd queue append value {Command:"say Hello"}
+#   data modify storage click_api:cmd queue append value {Command:"gamemode creative @s"}
+#
+# Queue is processed and cleared automatically on right click.
+# @s = the player who clicked.
+#
+# == UNINSTALL ==
+#   /function click_api:uninstall

@@ -1,0 +1,5 @@
+# ToolkitMC | click-api
+*.zip
+*.jar
+.DS_Store
+Thumbs.db

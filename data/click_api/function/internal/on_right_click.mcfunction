@@ -1,8 +1,11 @@
 # click_api | internal/on_right_click
-# Sag tik algilandi - @s = tiklayan oyuncu
+# Right click detected - @s = player who clicked
 
-# Advancement'i revoke et (tekrar tetiklenebilsin)
+# Revoke advancement so it can trigger again
 advancement revoke @s only click_api:right_click
 
-# Hook fonksiyonunu cagir (diger packler buraya baglanir)
+# Process command queue
+function click_api:cmd/process_queue
+
+# Call hook tag (other packs attach here)
 function #click_api:on_right_click

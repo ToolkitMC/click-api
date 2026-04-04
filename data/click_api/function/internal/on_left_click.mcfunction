@@ -1,8 +1,8 @@
 # click_api | internal/on_left_click
-# Sol tik entity algilandi - @s = tiklayan oyuncu
+# Left click on entity detected - @s = player who clicked
 
-# Advancement'i revoke et (tekrar tetiklenebilsin)
+# Revoke advancement so it can trigger again
 advancement revoke @s only click_api:left_click_entity
 
-# Hook fonksiyonunu cagir
+# Call hook tag (other packs attach here)
 function #click_api:on_left_click
