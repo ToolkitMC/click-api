@@ -1,0 +1,41 @@
+{
+  "description": {
+    "translate": "enchantment.minecraft.left_click_trigger",
+    "fallback": "Left Click Trigger"
+  },
+  "supported_items": "minecraft:carrot_on_a_stick",
+  "weight": 3,
+  "max_level": 1,
+  "min_cost": {
+    "base": 3,
+    "per_level_above_first": 1
+  },
+  "max_cost": {
+    "base": 5,
+    "per_level_above_first": 1
+  },
+  "anvil_cost": 0,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "click_api:detect/left_click"
+        }
+      }
+    ],
+    "minecraft:hit_block": [
+      {
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "click_api:detect/left_click"
+        }
+      }
+    ]
+  }
+}
