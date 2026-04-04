@@ -1,0 +1,71 @@
+name: Validate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          failed=0
+          for f in $(find . -name "*.json" -not -path "./.git/*"); do
+            if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+              echo "INVALID JSON: $f"
+              failed=1
+            else
+              echo "OK: $f"
+            fi
+          done
+          if [ $failed -ne 0 ]; then
+            echo "One or more JSON files are invalid."
+            exit 1
+          fi
+          echo "All JSON files are valid."
+
+      - name: Check pack.mcmeta exists
+        run: |
+          if [ ! -f "pack.mcmeta" ]; then
+            echo "ERROR: pack.mcmeta not found."
+            exit 1
+          fi
+          echo "pack.mcmeta found."
+
+      - name: Check required function files
+        run: |
+          required=(
+            "data/click_api/function/internal/load.mcfunction"
+            "data/click_api/function/internal/on_right_click.mcfunction"
+            "data/click_api/function/internal/on_left_click.mcfunction"
+            "data/click_api/function/internal/uninstall.mcfunction"
+            "data/click_api/function/cmd/run.mcfunction"
+            "data/click_api/function/cmd/process_queue.mcfunction"
+            "data/click_api/function/cmd/process_queue_step.mcfunction"
+            "data/click_api/function/cmd/queue_run.mcfunction"
+            "data/click_api/advancement/right_click.json"
+            "data/click_api/advancement/left_click_entity.json"
+            "data/minecraft/tags/function/load.json"
+          )
+          failed=0
+          for f in "${required[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              failed=1
+            else
+              echo "OK: $f"
+            fi
+          done
+          if [ $failed -ne 0 ]; then
+            echo "One or more required files are missing."
+            exit 1
+          fi
+          echo "All required files present."
