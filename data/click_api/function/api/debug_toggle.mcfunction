@@ -1,13 +1,17 @@
 # click_api v2.0 | api/debug_toggle
-# Debug mode toggle
+# Debug modunu aç/kapat (Skorboard yöntemi - en stabil)
 
-# Önceki durumu kaydetmek için geçici bir tag veya skorboard kullanmak en güvenli yoldur.
-# En basit ve en temiz yöntem (1.13+ çalışır):
+# Skorboard yoksa oluştur (bir kereye mahsus)
+scoreboard objectives add click_api.debug dummy
 
-# 1. Tag yoksa ekle, varsa kaldır (gerçek toggle)
-execute if entity @s[tag=click_api.debug] run tag @s remove click_api.debug
-execute if entity @s[tag=!click_api.debug] run tag @s add click_api.debug
+# Toggle yap (0 ↔ 1 arası çevir)
+scoreboard players add @s click_api.debug 1
+execute if score @s click_api.debug matches 2.. run scoreboard players set @s click_api.debug 0
 
-# 2. Yeni durumu bildir
-execute if entity @s[tag=click_api.debug] run tellraw @s ["",{"text":"[click_api] ","color":"green","bold":true},{"text":"Debug mode: ","color":"white"},{"text":"ON","color":"green","bold":true}]
-execute if entity @s[tag=!click_api.debug] run tellraw @s ["",{"text":"[click_api] ","color":"green","bold":true},{"text":"Debug mode: ","color":"white"},{"text":"OFF","color":"red","bold":true}]
+# Skora göre tag ekle/kaldır
+execute if score @s click_api.debug matches 1 run tag @s add click_api.debug
+execute if score @s click_api.debug matches 0 run tag @s remove click_api.debug
+
+# Mesaj göster
+execute if score @s click_api.debug matches 1 run tellraw @s ["",{"text":"[click_api] ","color":"green","bold":true},{"text":"Debug mode: ","color":"white"},{"text":"ON","color":"green","bold":true}]
+execute if score @s click_api.debug matches 0 run tellraw @s ["",{"text":"[click_api] ","color":"green","bold":true},{"text":"Debug mode: ","color":"white"},{"text":"OFF","color":"red","bold":true}]
