@@ -1,4 +1,4 @@
-# click_api v2.4.0
+# click_api v2.5.0
 **ToolkitMC** — Scoreboard + Macro tabanlı click detection sistemi
 
 Minecraft Java Edition 1.21.11+ (pack_format 94+) için geliştirilmiştir.
@@ -23,6 +23,7 @@ Datapack'i dünyanızın `datapacks/` klasörüne koyun, ardından `/reload` ça
 function click_api:api/give {value:1}   # left click
 function click_api:api/give {value:2}   # right click
 function click_api:api/give {value:3}   # main
+function click_api:api/give_all         # 3 tipin hepsini ver (test)
 ```
 
 ### Özel Item (give_custom)
@@ -59,21 +60,23 @@ carrot_on_a_stick[custom_data={clickAPI:{type:"right_click",run:{Commands:[
 
 `delay`: tick cinsinden (20 = 1 saniye). Tek komutta `Command`/`Delay` büyük harf.
 
+### Kuyruk Yönetimi
+
+```mcfunction
+function click_api:cmd/cancel {index:0}  # 0. komutu iptal et (0-bazlı index)
+function click_api:api/queue_clear       # tüm kuyruğu temizle
+```
+
 ---
 
 ## Cooldown Sistemi
 
-Tıklamaya cooldown uygula — cooldown aktifken detect fonksiyonları çalışmaz:
+Cooldown aktifken detect fonksiyonları çalışmaz:
 
 ```mcfunction
-# 1 saniyelik cooldown uygula
-function click_api:api/cooldown/set {ticks:20}
-
-# Cooldown'u anında kaldır
-function click_api:api/cooldown/clear
-
-# Cooldown durumunu göster
-function click_api:api/cooldown/check
+function click_api:api/cooldown/set {ticks:20}  # 1 saniyelik cooldown
+function click_api:api/cooldown/clear            # anında kaldır
+function click_api:api/cooldown/check            # durumu göster
 ```
 
 Tipik kullanım — hook fonksiyonunun içinde:
@@ -83,6 +86,39 @@ Tipik kullanım — hook fonksiyonunun içinde:
 execute if score @s click_api.cooldown matches 1.. run return 0
 say Tıklandı!
 function click_api:api/cooldown/set {ticks:20}
+```
+
+---
+
+## Item Transfer Sistemi
+
+Click_api item'ını bir oyuncudan diğerine taşı:
+
+```mcfunction
+# 1. Kaynaktan storage'a kaydet (item elden düşer)
+execute as <kaynak> run function click_api:api/transfer/save
+
+# 2. Hedefe ver
+execute as <hedef> run function click_api:api/transfer/give
+
+# Bekleyen item'ı kontrol et (opsiyonel)
+function click_api:api/transfer/peek
+```
+
+---
+
+## Event Sistemi
+
+```mcfunction
+# Son event'leri listele
+function click_api:api/show_events
+
+# Geçmişi temizle
+function click_api:event/history/clear
+
+# Son event'i storage'a kopyala (macro kullanımı için)
+function click_api:event/history/get
+# -> storage click_api:event last_event = {type:"...", player_id:N}
 ```
 
 ---
@@ -109,24 +145,37 @@ Hook fonksiyonunda `@s` = tıklayan oyuncu.
 
 ---
 
-## API Fonksiyonları
+## API Referansı
 
 ```mcfunction
 # Item
 function click_api:api/give {value:1|2|3}       # Hazır item ver
+function click_api:api/give_all                  # 3 tipin hepsini ver
 function click_api:api/give_custom {value:1|2|3} # Storage'dan özel item ver
 function click_api:api/clear                     # Elindeki click_api item'ı kaldır
+
+# Transfer
+function click_api:api/transfer/save             # Item'ı storage'a kaydet
+function click_api:api/transfer/give             # Storage'dan item al
+function click_api:api/transfer/peek             # Bekleyen item'ı göster
 
 # Cooldown
 function click_api:api/cooldown/set {ticks:N}    # Cooldown uygula
 function click_api:api/cooldown/clear            # Cooldown kaldır
 function click_api:api/cooldown/check            # Cooldown durumu
 
+# Komut Kuyruğu
+function click_api:cmd/cancel {index:N}          # N. komutu iptal et
+function click_api:api/queue_clear               # Kuyruğu temizle
+
+# Event
+function click_api:event/history/clear           # Geçmişi temizle
+function click_api:event/history/get             # Son event'i storage'a kopyala
+
 # Sistem
 function click_api:api/debug_toggle              # Debug aç/kapat
 function click_api:api/status                    # Sistem durumu
 function click_api:api/show_events               # Son event'leri listele
-function click_api:api/queue_clear               # Komut kuyruğunu temizle
 function click_api:api/reset                     # Storage'ı sıfırla
 function click_api:api/uninstall                 # Tamamen kaldır
 ```
@@ -141,14 +190,9 @@ function click_api:api/uninstall                 # Tamamen kaldır
 Farklı item için `minecraft:food` component kullanılabilir:
 
 ```mcfunction
-# item'a food + custom_data ekle
-/give @s minecraft:diamond_sword[
-  minecraft:food={nutrition:0,saturation:0,can_always_eat:true},
-  minecraft:custom_data={clickAPI:{type:"right_click"}}
-]
-# scoreboard oluştur (bir kez)
+give @s minecraft:diamond_sword[ minecraft:food={nutrition:0,saturation:0,can_always_eat:true}, minecraft:custom_data={clickAPI:{type:"right_click"}},minecraft:consumable={}]
+
 scoreboard objectives add my_rc minecraft.used:minecraft.diamond_sword
-# kendi tick'inde kontrol et
 execute as @a[scores={my_rc=1..}] if data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{}} run function click_api:detect/right_click
 execute as @a[scores={my_rc=1..}] run scoreboard players reset @s my_rc
 ```
@@ -160,18 +204,23 @@ execute as @a[scores={my_rc=1..}] run scoreboard players reset @s my_rc
 
 ## Değişiklik Geçmişi
 
+### v2.5.0
+- **Yeni**: `api/give_all` — 3 tipin hepsini ver
+- **Yeni**: `api/transfer/save|give|peek` — item transfer sistemi
+- **Yeni**: `cmd/cancel {index:N}` — kuyruktan komut iptal et
+- **Yeni**: `event/history/clear` — event geçmişini temizle
+- **Yeni**: `event/history/get` — son event'i storage'a kopyala
+
+### v2.4.1
+- **Düzeltme**: `lc_dealt` scoreboard kaldırıldı (yanlış stat, enchantment zaten handle ediyor)
+- **Düzeltme**: `apply_data` entity NBT merge yerine `item modify` kullanıyor
+
 ### v2.4.0
-- **Yeni**: `api/give_custom` — storage'dan özel isim ve data ile item ver
-- **Yeni**: `api/clear` — elindeki click_api item'ını kaldır
-- **Yeni**: `api/cooldown/set|clear|check` — tıklama cooldown sistemi
-- **Yeni**: `api/queue_clear` — komut kuyruğunu temizle
-- **Yeni**: `api/reset` — storage'ı sıfırla
-- **Yeni**: `item_modifier/apply_give_name` — item_name component uygulama
-- **Yeni**: Cooldown bilgisi `api/status`'a eklendi
+- **Yeni**: `api/give_custom`, `api/clear`, `api/cooldown/*`, `api/queue_clear`, `api/reset`
+- **Yeni**: `item_modifier/apply_give_name|apply_give_data`
 
 ### v2.3.1
-- **Düzeltme**: Overlay klasörleri kaldırıldı (sadece `data/`)
-- **Düzeltme**: `pack.mcmeta` temizlendi
+- **Düzeltme**: Overlay klasörleri kaldırıldı, `pack.mcmeta` temizlendi
 
 ### v2.2.0
 - **Düzeltme**: Komutlar tıklayan oyuncu olarak çalışır (UUID queue)

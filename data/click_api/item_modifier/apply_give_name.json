@@ -4,6 +4,6 @@
   "name": {
     "storage": "click_api:cmd",
     "nbt": "give_name",
-    "interpret": true
+    "interpret": false
   }
 }

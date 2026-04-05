@@ -1,7 +1,6 @@
 # click_api v2.4 | api/uninstall
 
 scoreboard objectives remove click_api.rc
-scoreboard objectives remove click_api.lc_dealt
 scoreboard objectives remove click_api.temp
 scoreboard objectives remove click_api.debug
 scoreboard objectives remove click_api.cooldown
@@ -16,6 +15,7 @@ data remove storage click_api:cmd queue
 data remove storage click_api:cmd current
 data remove storage click_api:cmd input
 data remove storage click_api:cmd multi_temp
+data remove storage click_api:transfer item
 data remove storage click_api:cmd give_name
 data remove storage click_api:cmd give_data
 
