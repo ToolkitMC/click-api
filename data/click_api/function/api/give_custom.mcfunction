@@ -11,7 +11,7 @@
 $scoreboard players set @s click_api.temp $(value)
 
 # give_name veya give_data yoksa varsayılanları doldur
-execute unless data storage click_api:cmd give_name run data modify storage click_api:cmd give_name set value ""
+execute unless data storage click_api:cmd give_name run data modify storage click_api:cmd give_name set value '{"text":""}'
 execute unless data storage click_api:cmd give_data run data modify storage click_api:cmd give_data set value {}
 
 execute if score @s click_api.temp matches 1 run function click_api:internal/give_custom/lc with storage click_api:cmd
