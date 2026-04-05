@@ -18,5 +18,5 @@ execute unless entity @s[tag=click_api.debug] run tellraw @s ["",{"text":"Debug 
 
 tellraw @s ["",{"text":"=====================================","color":"green","bold":true}]
 
-execute if data storage click_api:transfer item run tellraw @s ["",{"text":"Transfer Slot: ","color":"gray"},{"nbt":"transfer.item.id","storage":"click_api:","color":"yellow"},{"text":" (dolu)","color":"yellow"}]
+execute if data storage click_api:transfer item run tellraw @s ["",{"text":"Transfer Slot: ","color":"gray"},{"nbt":"item.id","storage":"click_api:transfer","color":"yellow"},{"text":" (dolu)","color":"yellow"}]
 execute unless data storage click_api:transfer item run tellraw @s ["",{"text":"Transfer Slot: ","color":"gray"},{"text":"boş","color":"green"}]
