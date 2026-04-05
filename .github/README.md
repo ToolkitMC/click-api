@@ -190,7 +190,10 @@ function click_api:api/uninstall                 # Tamamen kaldır
 Farklı item için `minecraft:food` component kullanılabilir:
 
 ```mcfunction
-give @s minecraft:diamond_sword[ minecraft:food={nutrition:0,saturation:0,can_always_eat:true}, minecraft:custom_data={clickAPI:{type:"right_click"}},minecraft:consumable={}]
+/give @s minecraft:diamond_sword[
+  minecraft:food={nutrition:0,saturation:0,can_always_eat:true},
+  minecraft:custom_data={clickAPI:{type:"right_click"}}
+]
 
 scoreboard objectives add my_rc minecraft.used:minecraft.diamond_sword
 execute as @a[scores={my_rc=1..}] if data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{}} run function click_api:detect/right_click

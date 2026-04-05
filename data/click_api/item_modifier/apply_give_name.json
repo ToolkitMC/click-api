@@ -1,9 +1,0 @@
-{
-  "function": "minecraft:set_name",
-  "target": "item_name",
-  "name": {
-    "storage": "click_api:cmd",
-    "nbt": "give_name",
-    "interpret": false
-  }
-}
