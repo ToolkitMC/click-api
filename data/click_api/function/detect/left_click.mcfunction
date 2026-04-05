@@ -1,5 +1,8 @@
-# click_api v2.2 | detect/left_click
+# click_api v2.4 | detect/left_click
 # @context: @s = tıklayan oyuncu
+
+# Cooldown aktifse çık
+execute if score @s click_api.cooldown matches 1.. run return 0
 
 # Sadece left_click veya main tipli item'lar geçer
 execute unless data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"left_click"}} unless data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"main"}} run return 0
@@ -14,5 +17,5 @@ execute if data entity @s SelectedItem.components."minecraft:custom_data"{clickA
 execute if data entity @s SelectedItem.components."minecraft:custom_data"{clickAPI:{type:"main"}} run function #click_api:on_main_left
 function #click_api:on_any_click
 
-# clickAPI.run -> queue (Executor UUID ile)
+# clickAPI.run -> queue
 execute if data entity @s SelectedItem.components."minecraft:custom_data".clickAPI.run run function click_api:cmd/queue_from_entity

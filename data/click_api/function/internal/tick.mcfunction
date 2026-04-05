@@ -1,11 +1,13 @@
-# click_api v2.1.1 | internal/tick
-# Ana tick loop - click detection
-# Her tip (left_click, right_click, main) buradan geçer, çakışma olmaz.
+# click_api v2.4 | internal/tick
+# Ana tick loop
 
-# Right click: rc scoreboard >= 1 olan HERKESİ yakala (tip fark etmez)
+# Cooldown decrement (cooldown > 0 olan oyuncular)
+scoreboard players remove @a[scores={click_api.cooldown=1..}] click_api.cooldown 1
+
+# Right click detection
 execute as @a[scores={click_api.rc=1..}] if data entity @s SelectedItem.components."minecraft:custom_data".clickAPI run function click_api:detect/right_click
 
-# Left click: lc_dealt >= 1 olan HERKESİ yakala (tip fark etmez)
+# Left click detection
 execute as @a[scores={click_api.lc_dealt=1..},nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}}] if data entity @s SelectedItem.components."minecraft:custom_data".clickAPI if data entity @s SelectedItem.components."minecraft:piercing_weapon" run function click_api:detect/left_click
 
 # lc_dealt sıfırla
