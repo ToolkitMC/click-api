@@ -1,7 +1,7 @@
 # click_api v2.4.0
 **ToolkitMC** — Scoreboard + Macro tabanlı click detection sistemi
 
-Minecraft Java Edition 1.21.4+ (pack_format 61+) için geliştirilmiştir.
+Minecraft Java Edition 1.21.11+ (pack_format 94+) için geliştirilmiştir.
 
 ---
 
