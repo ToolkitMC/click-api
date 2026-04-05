@@ -14,9 +14,9 @@ execute unless data storage click_api:event queue run data modify storage click_
 execute unless data storage click_api:cmd queue run data modify storage click_api:cmd queue set value []
 
 # Versiyon bilgisi
-data modify storage click_api:internal version set value "2.5.1"
+data modify storage click_api:internal version set value "2.5.2"
 data modify storage click_api:internal author set value "ToolkitMC"
 
 data modify storage click_api:internal loaded set value 1b
 
-tellraw @a[tag=click_api.debug] [{"text":"[click_api] ","color":"green","bold":true},{"text":"v2.5.1 Loaded","color":"white"}]
+tellraw @a[tag=click_api.debug] [{"text":"[click_api] ","color":"green","bold":true},{"text":"v2.5.2 Loaded","color":"white"}]
